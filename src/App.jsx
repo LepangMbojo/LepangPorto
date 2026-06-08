@@ -32,12 +32,33 @@ export default function App() {
         ::-webkit-scrollbar-track { background: rgba(10,14,26,0.5); }
         ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #22C55E 0%, #4ADE80 100%); border-radius: 9999px; box-shadow: 0 0 12px rgba(34,197,94,0.4); }
         ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #4ADE80 0%, #86EFAC 100%); box-shadow: 0 0 16px rgba(34,197,94,0.6); }
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        input::placeholder, textarea::placeholder { color: rgba(192, 171, 171, 0.24); }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.24); }
         button { font-family: inherit; }
+
+
+        .profile-sidebar {
+          position: sticky;
+          top: 100px;
+          flex-basis: 350px;
+          flex-shrink: 0;
+          height: max-content; /* Penting agar kartu tidak melar ke bawah */
+          z-index: 30;
+        }
+
+        /* Saat di layar HP (lebar di bawah 900px), matikan sticky-nya! */
+        @media (max-width: 900px) {
+          .profile-sidebar {
+            position: relative; /* Berubah jadi kartu biasa */
+            top: 0;
+            flex-basis: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+          }
+        }
+  
       `}</style>
 
       <AnimatePresence>
@@ -62,15 +83,7 @@ export default function App() {
             }}
           >
             {/* KIRI: SIDEBAR STICKY */}
-            <aside
-              style={{
-                position: "sticky",
-                top: "100px",
-                flexBasis: "350px",
-                flexShrink: 0,
-                zIndex: 10,
-              }}
-            >
+            <aside className="profile-sidebar">
               <PremiumProfileCard 
                 name="Lepang Mbojo"
                 title="Like a frog exploring every corner of the pond, I continuously learn, adapt, and build innovative digital solutions through code."

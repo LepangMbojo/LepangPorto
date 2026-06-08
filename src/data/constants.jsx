@@ -22,7 +22,7 @@ export const SKILLS = [
   {
     cat: "App & Web Development",
     icon: "💻", 
-    color: "#38BDF8", // Biru air
+    color: "#38BDF8", 
     items: [
       { name: "Kotlin", icon: <SiKotlin /> },
       { name: "Android XML", icon: <SiAndroid /> },
@@ -35,7 +35,7 @@ export const SKILLS = [
   {
     cat: "AI & Data Science",
     icon: "🧠", 
-    color: "#A855F7", // Ungu
+    color: "#A855F7", 
     items: [
       { name: "Python", icon: <SiPython /> },
       { name: "TensorFlow", icon: <SiTensorflow /> },
@@ -44,7 +44,7 @@ export const SKILLS = [
   {
     cat: "Networking & Tools",
     icon: "📡", 
-    color: "#22C55E", // Hijau neon
+    color: "#22C55E", 
     items: [
       { name: "Cisco", icon: <SiCisco /> },
       { name: "Git", icon: <SiGit /> },
@@ -55,7 +55,7 @@ export const SKILLS = [
 
 
 export const TIMELINE = [
-  { role: "React Web Dev Graduate", org: "Dicoding", period: "januari 2026 - juli 2026", icon: "/logos/Dicoding.jpg" },
+  { role: "Coding Camp 2026 powered by DBS", org: "Dicoding", period: "januari 2026 - juli 2026", icon: "/logos/Dicoding.jpg" },
   { role: "Google Student Ambassador", org: "Google", period: "september 2025 - desember 2025 ", icon: "/logos/GSA.jpg" },
   { role: "Informatics Engineering", org: "University of Mataram", period: "2023 – sekarang", icon: "/logos/unram.png" },
 ];
