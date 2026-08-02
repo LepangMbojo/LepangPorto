@@ -2,7 +2,14 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { buttonStyles } from "../../styles/theme";
 
-export function RippleBtn({ children, primary, onClick, style }) {
+export function RippleBtn({
+  children,
+  primary,
+  onClick,
+  style,
+  type = "button",
+  disabled,
+}) {
   const [rp, setRp] = useState([]);
 
   const click = (e) => {
@@ -10,13 +17,15 @@ export function RippleBtn({ children, primary, onClick, style }) {
     const id = Date.now();
     setRp((p) => [...p, { id, x: e.clientX - r.left, y: e.clientY - r.top }]);
     setTimeout(() => setRp((p) => p.filter((x) => x.id !== id)), 900);
-    onClick?.();
+    onClick?.(e);
   };
 
   return (
     <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.96 }}
+      type={type}
+      disabled={disabled}
+      whileHover={disabled ? {} : { scale: 1.05 }}
+      whileTap={disabled ? {} : { scale: 0.96 }}
       onClick={click}
       style={{
         ...buttonStyles.base,

@@ -32,24 +32,27 @@ export function About() {
           paddingTop: 130 
         }}
       >
-        {/* Floating pixel art */}
+        {/* Floating pixel art — dipatok ke sisi kanan container, bukan koordinat
+            px tetap, supaya tidak meluber keluar layar di viewport sempit. */}
         <motion.div
-         
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           style={{
             position: "absolute",
             top: 80,
-            left: 690,
-            width: 75,  
-            height: 75,
+            right: 0,
+            width: "clamp(48px, 9vw, 75px)",
+            height: "clamp(48px, 9vw, 75px)",
             opacity: 0.9,
             filter: "drop-shadow(0 0 20px rgba(34, 197, 94, 0.2))",
-            pointerEvents: "none", 
+            pointerEvents: "none",
           }}
         >
-          <img 
-            src="/fOpen.png" 
-            alt="Pixel Decor" 
-            style={{ 
+          <img
+            src="/fOpen.png"
+            alt=""
+            aria-hidden="true"
+            style={{
               width: "100%", 
               height: "100%", 
               objectFit: "contain",

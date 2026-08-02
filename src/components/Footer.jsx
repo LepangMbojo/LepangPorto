@@ -5,12 +5,13 @@ function BlinkFrog() {
   const [b, setB] = useState(false);
 
   useEffect(() => {
-    let timer;
+    let openTimer;
+    let closeTimer;
     const schedule = () => {
-      timer = setTimeout(
+      openTimer = setTimeout(
         () => {
           setB(true);
-          setTimeout(() => {
+          closeTimer = setTimeout(() => {
             setB(false);
             schedule();
           }, 160);
@@ -19,7 +20,10 @@ function BlinkFrog() {
       );
     };
     schedule();
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(openTimer);
+      clearTimeout(closeTimer);
+    };
   }, []);
 
   return (
@@ -36,7 +40,9 @@ function BlinkFrog() {
   }}
 >
   <img
-    src={b ? "/fklop.png" : "/fOpen.png"} 
+    src={b ? "/fklop.png" : "/fOpen.png"}
+    alt=""
+    aria-hidden="true"
     style={{
       width: "200%", 
       height: "200%",
@@ -95,6 +101,9 @@ export function Footer() {
             key={i}
             href={s.href}
             aria-label={s.text}
+            {...(s.href.startsWith("http")
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {})}
             animate={{ y: [0, -5, 0] }}
             transition={{
               duration: 2.2 + i * 0.28,
@@ -130,7 +139,7 @@ export function Footer() {
         </span>
       </p>
       <p style={{ color: "#bac3cf", fontSize: 12, marginTop: 5 }}>
-        © 2025 · Mataram, NTB, Indonesia
+        © {new Date().getFullYear()} · Mataram, NTB, Indonesia
       </p>
     </footer>
   );

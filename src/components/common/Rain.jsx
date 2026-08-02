@@ -9,10 +9,21 @@ export function Rain() {
     const ctx = c.getContext("2d");
     let raf;
 
-    // Mengatur ulang ukuran canvas
+    // Dimensi logis (CSS px) yang dipakai seluruh perhitungan posisi.
+    let W = window.innerWidth;
+    let H = window.innerHeight;
+
+    // Mengatur ulang ukuran canvas mengikuti device pixel ratio, supaya garis
+    // hujan dan daun teratai tidak buram di layar retina/HiDPI.
     const resize = () => {
-      c.width = window.innerWidth;
-      c.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      W = window.innerWidth;
+      H = window.innerHeight;
+      c.width = W * dpr;
+      c.height = H * dpr;
+      c.style.width = `${W}px`;
+      c.style.height = `${H}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener("resize", resize);
@@ -45,7 +56,7 @@ export function Rain() {
 
     // 3. LOOP ANIMASI
     const draw = () => {
-      ctx.clearRect(0, 0, c.width, c.height);
+      ctx.clearRect(0, 0, W, H);
 
       // ── GERAKAN & GAMBAR HUJAN ──
       drops.forEach((d) => {
@@ -57,9 +68,9 @@ export function Rain() {
         ctx.stroke();
 
         d.y += d.s;
-        if (d.y > c.height) {
+        if (d.y > H) {
           d.y = -d.l;
-          d.x = Math.random() * c.width;
+          d.x = Math.random() * W;
         }
       });
 
@@ -67,8 +78,8 @@ export function Rain() {
       lilypads.forEach((lp) => {
         // Update waktu untuk efek Math.sin (goyangan naik turun)
         lp.bobTime += lp.bobSpeed;
-        const currentX = lp.xRatio * c.width;
-        const currentY = (lp.yRatio * c.height) + Math.sin(lp.bobTime) * lp.bobRange;
+        const currentX = lp.xRatio * W;
+        const currentY = lp.yRatio * H + Math.sin(lp.bobTime) * lp.bobRange;
 
         ctx.save();
         // Pindahkan koordinat canvas ke tengah-tengah lilypad

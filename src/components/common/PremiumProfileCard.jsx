@@ -30,7 +30,12 @@ export function PremiumProfileCard({
     }));
   });
 
+  // Hanya melacak posisi mouse saat kursor berada di atas kartu. Kalau listener
+  // dipasang permanen di window, setiap gerakan mouse di halaman manapun akan
+  // me-render ulang seluruh kartu ini.
   useEffect(() => {
+    if (!isHovering) return;
+
     const handleMouseMove = (e) => {
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
@@ -43,7 +48,7 @@ export function PremiumProfileCard({
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [isHovering]);
 
   return (
     <motion.div
@@ -290,21 +295,7 @@ export function PremiumProfileCard({
             {name}
           </motion.h2>
 
-         {/* ── THE GAP: Garis Putus-putus & Ikon (Sesuai Referensimu) ── */}
-          <div 
-            style={{ 
-              position: "relative", 
-              width: "100%", 
-              height: "70px",
-              display: "flex", 
-              justifyContent: "center", 
-              marginTop: 4 
-            }}
-          >
-
-          </div>
-
-          {/* ── DESKRIPSI (Kata-kata di Bawah Gap) ── */}
+          {/* ── DESKRIPSI ── */}
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -316,6 +307,7 @@ export function PremiumProfileCard({
               lineHeight: 1.6,
               fontWeight: 500,
               padding: "0 10px",
+              marginTop: 18,
               marginBottom: 24,
             }}
           >
@@ -436,7 +428,12 @@ export function PremiumProfileCard({
 
             {socials?.email && (
               <motion.a
-                href={socials.email}
+                href={
+                  socials.email.startsWith("mailto:")
+                    ? socials.email
+                    : `mailto:${socials.email}`
+                }
+                aria-label="Email"
                 whileHover={{ scale: 1.25, rotate: -5 }}
                 whileTap={{ scale: 0.95 }}
                 style={{

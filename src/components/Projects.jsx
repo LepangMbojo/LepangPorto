@@ -182,24 +182,38 @@ function ProjCard({ p, i }) {
 export function Projects() {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+  const [error, setError] = useState(null);
+
   // GANTI INI DENGAN USERNAME GITHUB KAMU
-  const GITHUB_USERNAME = "LepangMbojo"; 
+  const GITHUB_USERNAME = "LepangMbojo";
 
   useEffect(() => {
+    const controller = new AbortController();
+
     // Mengambil data dari GitHub API (diurutkan berdasarkan yang terbaru)
-    fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`)
-      .then((res) => res.json())
-      .then((data) => {
+    fetch(
+      `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`,
+      { signal: controller.signal }
+    )
+      .then(async (res) => {
+        const data = await res.json();
+        // Saat rate limit (60 request/jam tanpa token) atau user tidak ditemukan,
+        // GitHub membalas objek { message: ... }, bukan array.
+        if (!res.ok || !Array.isArray(data)) {
+          throw new Error(data?.message || `GitHub API error (${res.status})`);
+        }
         // Memfilter repo yang bukan fork (jika kamu mau menampilkan fork, hapus filter ini)
-        const myRepos = data.filter(repo => !repo.fork);
-        setRepos(myRepos);
+        setRepos(data.filter((repo) => !repo.fork));
         setLoading(false);
       })
       .catch((err) => {
+        if (err.name === "AbortError") return;
         console.error("Error fetching GitHub repos:", err);
+        setError(err.message);
         setLoading(false);
       });
+
+    return () => controller.abort();
   }, []);
 
   return (
@@ -221,6 +235,43 @@ export function Projects() {
             <FaGithub />
           </motion.div>
           <p style={{ marginTop: 12 }}>Fetching from GitHub...</p>
+        </div>
+      ) : repos.length === 0 ? (
+        <div
+          style={{
+            ...glass,
+            padding: "32px 24px",
+            textAlign: "center",
+            color: "rgba(255,255,255,0.6)",
+            fontSize: 14,
+            lineHeight: 1.7,
+          }}
+        >
+          <p style={{ marginBottom: 14 }}>
+            {error
+              ? "🐸 The pond is quiet — couldn't load repositories right now."
+              : "🐸 No public repositories to show yet."}
+          </p>
+          <a
+            href={`https://github.com/${GITHUB_USERNAME}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "8px 16px",
+              borderRadius: 9999,
+              background: "rgba(34,197,94,0.12)",
+              border: "1px solid rgba(34,197,94,0.3)",
+              color: "#4ADE80",
+              fontSize: 12,
+              fontWeight: 700,
+              textDecoration: "none",
+            }}
+          >
+            <FaGithub /> Visit GitHub profile
+          </a>
         </div>
       ) : (
         <div

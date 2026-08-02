@@ -10,9 +10,12 @@ export function Contact() {
 
   const set = (k) => (e) => setForm((p) => ({ ...p, [k]: e.target.value }));
 
-  const sendMessage = async () => {
+  const sendMessage = async (e) => {
+    e?.preventDefault();
+    if (isSending) return;
+
     // Validasi sederhana: pastikan semua kolom terisi
-    if (!form.name || !form.email || !form.msg) {
+    if (!form.name.trim() || !form.email.trim() || !form.msg.trim()) {
       alert("🐸 Tolong isi semua kolom sebelum melempar pesan ke kolam!");
       return;
     }
@@ -43,7 +46,8 @@ export function Contact() {
       } else {
         alert("Waduh, kataknya sedang tidur. Gagal mengirim pesan.");
       }
-    } catch (error) {
+    } catch (err) {
+      console.error("Gagal mengirim pesan:", err);
       alert("Terjadi masalah jaringan. Silakan coba lagi.");
     } finally {
       setIsSending(false);
@@ -63,10 +67,16 @@ export function Contact() {
     >
       <SectionHead  title="Contact" sub="writing on a foggy, wet window" />
       <GlassCard style={{ padding: 38 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        <form
+          onSubmit={sendMessage}
+          style={{ display: "flex", flexDirection: "column", gap: 20 }}
+        >
           <div>
-            <label style={labelStyles}>Name</label>
+            <label htmlFor="contact-name" style={labelStyles}>Name</label>
             <input
+              id="contact-name"
+              name="name"
+              autoComplete="name"
               style={inputStyles.base}
               placeholder="🐸 Your name..."
               value={form.name}
@@ -76,9 +86,12 @@ export function Contact() {
             />
           </div>
           <div>
-            <label style={labelStyles}>Email</label>
+            <label htmlFor="contact-email" style={labelStyles}>Email</label>
             <input
+              id="contact-email"
+              name="email"
               type="email"
+              autoComplete="email"
               style={inputStyles.base}
               placeholder="💧 your@email.com"
               value={form.email}
@@ -88,8 +101,10 @@ export function Contact() {
             />
           </div>
           <div>
-            <label style={labelStyles}>Message</label>
+            <label htmlFor="contact-msg" style={labelStyles}>Message</label>
             <textarea
+              id="contact-msg"
+              name="message"
               style={{ ...inputStyles.base, resize: "vertical" }}
               rows={5}
               placeholder="🌿 Leave a message in the pond..."
@@ -101,13 +116,14 @@ export function Contact() {
           </div>
           <RippleBtn
             primary
-            onClick={sendMessage}
+            type="submit"
             // Mencegah tombol ditekan berkali-kali saat sedang loading
-            style={{ opacity: isSending ? 0.7 : 1, pointerEvents: isSending ? "none" : "auto" }}
+            disabled={isSending}
+            style={{ opacity: isSending ? 0.7 : 1, cursor: isSending ? "not-allowed" : "pointer" }}
           >
             {isSending ? "⏳ Sending..." : "🌊 Send Message"}
           </RippleBtn>
-        </div>
+        </form>
       </GlassCard>
     </section>
   );
