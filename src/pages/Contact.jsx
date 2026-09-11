@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { GlassCard } from "./common/GlassCard";
-import { RippleBtn } from "./common/RippleBtn";
-import { SectionHead } from "./common/SectionHead";
+import { GlassCard } from "../components/common/GlassCard";
+import { RippleBtn } from "../components/common/RippleBtn";
+import { SectionHead } from "../components/common/SectionHead";
 import { inputStyles, labelStyles } from "../styles/theme.js";
 
 export function Contact() {
@@ -58,7 +58,7 @@ export function Contact() {
     <section
       id="contact"
       style={{
-        padding: "90px 24px",
+        padding: 0,
         maxWidth: 560,
         margin: "0 auto",
         position: "relative",

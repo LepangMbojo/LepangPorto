@@ -1,15 +1,15 @@
 import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader } from "./components/common/Loader";
-import { Rain } from "./components/common/Rain";
-import { Navigation } from "./components/Navigation";
-import { About } from "./components/About";
-import { Skills } from "./components/Skills";
-import { Projects } from "./components/Projects";
-import { Experience } from "./components/Experience";
-import { Contact } from "./components/Contact";
-import { Footer } from "./components/Footer";
-import { PremiumProfileCard } from "./components/common/PremiumProfileCard";
+import { ScrollToTop } from "./components/common/ScrollToTop";
+import { MainLayout } from "./layouts/MainLayout";
+import { About } from "./pages/About";
+import { Skills } from "./pages/Skills";
+import { Projects } from "./pages/Projects";
+import { Experience } from "./pages/Experience";
+import { Contact } from "./pages/Contact";
+import { NotFoundPage } from "./pages/NotFoundPage";
 
 import "./styles/global.css";
 
@@ -58,7 +58,7 @@ export default function App() {
             margin-bottom: 24px;
           }
         }
-  
+
       `}</style>
 
       <AnimatePresence>
@@ -67,46 +67,17 @@ export default function App() {
 
       {!loading && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
-          <Rain />
-          <Navigation />
-
-          {/* LAYOUT DUA KOLOM UTAMA UNTUK SELURUH HALAMAN */}
-          <main
-            style={{
-              maxWidth: 1200,
-              margin: "0 auto",
-              padding: "40px 24px",
-              display: "flex",
-              gap: "40px",
-              alignItems: "flex-start", // Wajib agar sticky berfungsi
-              flexWrap: "wrap",
-            }}
-          >
-            {/* KIRI: SIDEBAR STICKY */}
-            <aside className="profile-sidebar">
-              <PremiumProfileCard 
-                name="Lepang Mbojo"
-                title="Like a frog exploring every corner of the pond, I continuously learn, adapt, and build innovative digital solutions through code."
-                image="/corpme.JPG"
-                socials={{
-                  github: "https://github.com/LepangMbojo",
-                  linkedin: "https://www.linkedin.com/in/m-khalid-al-rejeki-3826b7337/",
-                  instagram: "https://www.instagram.com/lepangmbojo/",
-                  email: "khalidrizki54@gmail.com",
-                }}
-              />
-            </aside>
-
-            {/* KANAN: KONTEN UTAMA */}
-            <div style={{ flex: 1, minWidth: "300px" }}>
-              <About />
-              <Skills />
-              <Projects />
-              <Experience />
-              <Contact />
-              <Footer />
-            </div>
-          </main>
+          <ScrollToTop />
+          <Routes>
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<About />} />
+              <Route path="/skills" element={<Skills />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/experience" element={<Experience />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
         </motion.div>
       )}
     </div>

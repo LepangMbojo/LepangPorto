@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
 import { TIMELINE } from "../data/constants";
-import { GlassCard } from "./common/GlassCard";
-import { SectionHead } from "./common/SectionHead";
+import { GlassCard } from "../components/common/GlassCard";
+import { SectionHead } from "../components/common/SectionHead";
 
 export function Experience() {
   return (
     <section
       id="experience"
       style={{
-        padding: "90px 24px",
+        padding: 0,
         maxWidth: 680,
         margin: "0 auto",
         position: "relative",

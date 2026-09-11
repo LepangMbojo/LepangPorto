@@ -1,24 +1,22 @@
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, Wrench, Folder, Briefcase, Mail } from "lucide-react";
 
 export function Navigation() {
   const [hovered, setHovered] = useState(null);
-  
+  const { pathname } = useLocation();
+
   // 1. KITA BUAT PELACAK HOVER UNTUK SELURUH NAVBAR
   const [navHovered, setNavHovered] = useState(false);
 
   const navItems = [
-    { id: "about", icon: <User size={20} strokeWidth={2} />, label: "About" },
-    { id: "skills", icon: <Wrench size={20} strokeWidth={2} />, label: "Skills" },
-    { id: "projects", icon: <Folder size={20} strokeWidth={2} />, label: "Projects" },
-    { id: "experience", icon: <Briefcase size={20} strokeWidth={2} />, label: "Experience" },
-    { id: "contact", icon: <Mail size={20} strokeWidth={2} />, label: "Contact" },
+    { to: "/", icon: <User size={20} strokeWidth={2} />, label: "About" },
+    { to: "/skills", icon: <Wrench size={20} strokeWidth={2} />, label: "Skills" },
+    { to: "/projects", icon: <Folder size={20} strokeWidth={2} />, label: "Projects" },
+    { to: "/experience", icon: <Briefcase size={20} strokeWidth={2} />, label: "Experience" },
+    { to: "/contact", icon: <Mail size={20} strokeWidth={2} />, label: "Contact" },
   ];
-
-  const go = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <div
@@ -56,41 +54,65 @@ export function Navigation() {
           boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
         }}
       >
-        {navItems.map((item, index) => (
-          <button
-            key={index}
-            onClick={() => go(item.id)}
+        {navItems.map((item) => {
+          const active = pathname === item.to;
+
+          return (
+          <Link
+            key={item.to}
+            to={item.to}
             aria-label={item.label}
+            aria-current={active ? "page" : undefined}
             style={{
-              position: "relative", 
+              position: "relative",
               background: "none",
               border: "none",
-              color: "rgba(255,255,255,0.45)",
+              color: active ? "#4ADE80" : "rgba(255,255,255,0.45)",
+              filter: active ? "drop-shadow(0 0 8px rgba(74,222,128,0.4))" : "none",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               transition: "all 0.3s ease",
               padding: "4px",
+              textDecoration: "none",
             }}
             onMouseEnter={(e) => {
-              setHovered(item.id); 
+              setHovered(item.to);
               e.currentTarget.style.color = "#4ADE80";
               e.currentTarget.style.transform = "scale(1.2) translateY(-3px)";
               e.currentTarget.style.filter = "drop-shadow(0 0 8px rgba(74,222,128,0.4))";
             }}
             onMouseLeave={(e) => {
-              setHovered(null); 
-              e.currentTarget.style.color = "rgba(255,255,255,0.45)";
+              setHovered(null);
+              e.currentTarget.style.color = active ? "#4ADE80" : "rgba(255,255,255,0.45)";
               e.currentTarget.style.transform = "scale(1) translateY(0)";
-              e.currentTarget.style.filter = "none";
+              e.currentTarget.style.filter = active ? "drop-shadow(0 0 8px rgba(74,222,128,0.4))" : "none";
             }}
           >
             {item.icon}
 
+            {/* TITIK PENANDA HALAMAN AKTIF */}
+            {active && (
+              <motion.span
+                layoutId="nav-active-dot"
+                style={{
+                  position: "absolute",
+                  bottom: -10,
+                  left: "50%",
+                  translateX: "-50%",
+                  width: 5,
+                  height: 5,
+                  borderRadius: "50%",
+                  background: "#4ADE80",
+                  boxShadow: "0 0 8px rgba(74,222,128,0.8)",
+                }}
+              />
+            )}
+
             {/* LABEL TOOLTIP ANIMASI */}
             <AnimatePresence>
-              {hovered === item.id && (
+              {hovered === item.to && (
                 <motion.div
                   initial={{ opacity: 0, y: 10, scale: 0.8 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -117,8 +139,9 @@ export function Navigation() {
               )}
             </AnimatePresence>
 
-          </button>
-        ))}
+          </Link>
+          );
+        })}
       </motion.nav>
     </div>
   );

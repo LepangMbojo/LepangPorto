@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, useRef, useEffect } from "react"; // Tambah useEffect
 import { glass } from "../styles/theme.js";
-import { SectionHead } from "./common/SectionHead";
+import { SectionHead } from "../components/common/SectionHead";
 import { FaGithub, FaExternalLinkAlt, FaStar, FaCodeBranch } from "react-icons/fa"; // Icon tambahan
 
 function ProjCard({ p, i }) {
@@ -220,7 +220,7 @@ export function Projects() {
     <section
       id="projects"
       style={{
-        padding: "90px 24px",
+        padding: 0,
         maxWidth: 1100,
         margin: "0 auto",
         position: "relative",

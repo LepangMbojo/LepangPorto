@@ -15,7 +15,6 @@ export function About() {
     <section
       id="about"
       style={{
-        marginBottom: 80,
         position: "relative",
         zIndex: 2,
       }}
@@ -25,11 +24,10 @@ export function About() {
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        style={{ 
-          position: "relative", 
-          textAlign: "left", 
+        style={{
+          position: "relative",
+          textAlign: "left",
           marginBottom: 60,
-          paddingTop: 130 
         }}
       >
         {/* Floating pixel art — dipatok ke sisi kanan container, bukan koordinat
@@ -39,7 +37,7 @@ export function About() {
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           style={{
             position: "absolute",
-            top: 80,
+            top: 0,
             right: 0,
             width: "clamp(48px, 9vw, 75px)",
             height: "clamp(48px, 9vw, 75px)",
